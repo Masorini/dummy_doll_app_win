@@ -1,8 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedLayout
+from core.config import StyleSheet, Dimensions
 from .pages.offline import OfflinePage
 from .pages.realtime import RealtimePage
-from core.config import StyleSheet, Dimensions
-
+from .pages.teaching import TeachingPage
+from .pages.manual import ManualPage
+from .pages.posture import PosturePage
+from .pages.library import LibraryPage
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -51,6 +54,10 @@ class MainWindow(QWidget):
         # 创建页面实例
         self.pages['离线控制'] = OfflinePage()
         self.pages['实时调试'] = RealtimePage()
+        self.pages['示教规划'] = TeachingPage()
+        self.pages['手动规划'] = ManualPage()
+        self.pages['座姿配置'] = PosturePage()
+        self.pages['库管理'] = LibraryPage()
 
         # 将页面添加到堆栈布局
         for name, page in self.pages.items():
