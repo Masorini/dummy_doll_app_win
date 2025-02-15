@@ -1,7 +1,6 @@
-from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedLayout, QToolButton, QLabel
-from core.config import StyleSheet, Dimensions
+from app.core.config import StyleSheet
 from .pages.offline import OfflinePage
 from .pages.realtime import RealtimePage
 from .pages.teaching import TeachingPage
@@ -38,7 +37,7 @@ class MainWindow(QWidget):
 
         # 感叹号按钮 todo: 尺寸修改未生效
         self.info_btn = QToolButton()
-        self.info_btn.setIcon(QIcon("resources/icons/warning2.png")) # 需要提供图标资源
+        self.info_btn.setIcon(QIcon("app/resources/icons/warning2.png")) # 需要提供图标资源
         self.info_btn.setToolTip("系统状态提示")
         self.info_btn.setStyleSheet(StyleSheet.QToolButton)
 

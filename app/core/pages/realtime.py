@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QComboBox, QPushButton, QGroupBox,
                              QFormLayout, QLineEdit, QLabel, QHBoxLayout)
 from .base_page import BasePage
-from core.config import StyleSheet
+from app.core.config import StyleSheet
 
 
 class RealtimePage(BasePage):

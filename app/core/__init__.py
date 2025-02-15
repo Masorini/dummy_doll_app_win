@@ -1,5 +1,6 @@
 from PyQt5.QtGui import QIcon
 import os
+from .main_window import MainWindow
 
 def init_resources():
     """初始化资源"""

@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QTableWidget, QTableWidgetItem, QGroupBox,
                              QRadioButton, QPushButton, QLabel, QVBoxLayout, QHBoxLayout)
 from .base_page import BasePage
-from core.config import StyleSheet, Dimensions
+from app.core.config import StyleSheet
 
 
 class OfflinePage(BasePage):

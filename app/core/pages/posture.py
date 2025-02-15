@@ -1,7 +1,6 @@
-from PyQt5.QtWidgets import (QWidget, QGridLayout, QHBoxLayout, QVBoxLayout,
-                             QPushButton, QSpinBox, QLabel, QGroupBox)
+from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QPushButton, QSpinBox, QLabel, QGroupBox)
 from .base_page import BasePage
-from core.config import StyleSheet, Dimensions
+from app.core.config import StyleSheet
 
 
 class PosturePage(BasePage):

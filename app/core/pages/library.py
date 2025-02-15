@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QPushButton,
+from PyQt5.QtWidgets import (QHBoxLayout, QVBoxLayout, QPushButton,
                              QLabel, QListWidget, QFileDialog, QGroupBox, QLineEdit)
 from .base_page import BasePage
-from core.config import StyleSheet, Dimensions
+from app.core.config import StyleSheet
 
 
 class LibraryPage(BasePage):

@@ -1,25 +1,21 @@
-from PyQt5.QtWidgets import (QWidget, QGridLayout, QHBoxLayout, QVBoxLayout,
-                             QPushButton, QLineEdit, QLabel, QGroupBox,
-                             QSpinBox, QCheckBox)
+from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QPushButton, QLineEdit, QCheckBox, QGroupBox,
+                             QLabel)
 from .base_page import BasePage
-from core.config import StyleSheet, Dimensions
+from app.core.config import StyleSheet
 
 
-class ManualPage(BasePage):
+class TeachingPage(BasePage):
     def __init__(self):
         super().__init__()
         self.init_ui()
 
     def init_ui(self):
-        """初始化手动规划页面"""
+        """初始化示教规划页面"""
         # 电源控制区
         self.init_power_controls()
 
-        # 接头选择区
-        self.init_connector_controls()
-
-        # 关节角度控制区
-        # self.init_joint_controls()
+        # 位置读取区
+        self.init_position_controls()
 
         # 序列管理区
         self.init_sequence_controls()
@@ -38,66 +34,49 @@ class ManualPage(BasePage):
         hbox = QHBoxLayout()
         self.power_on_btn = QPushButton("上电")
         self.power_off_btn = QPushButton("断电")
+        self.feces_btn = QPushButton("使能")
+        self.feces_clear_btn = QPushButton("去使能")
 
-        for btn in [self.power_on_btn, self.power_off_btn]:
+        for btn in [self.power_on_btn, self.power_off_btn,
+                    self.feces_btn, self.feces_clear_btn]:
             btn.setFixedSize(120, 40)
             hbox.addWidget(btn)
 
         self.layout.addLayout(hbox)
 
-    def init_connector_controls(self):
-        """接头选择组件"""
-        group = QGroupBox("接头：ID1")
-        grid = QGridLayout()
+    def init_position_controls(self):
+        """位置读取组件"""
+        hbox = QHBoxLayout()
+        self.read_pos_btn = QPushButton("读取当前位置")
+        self.stop_read_btn = QPushButton("停止读取")
 
-        # 左半身关节
-        left_joints = [
-            ("左肩前摆", 0, 0),
-            ("左肘", 1, 0),
-            ("左髋前摆", 2, 0),
-            ("左髋侧摆", 3, 0),
-            ("左膝", 4, 0)
-        ]
+        for btn in [self.read_pos_btn, self.stop_read_btn]:
+            btn.setFixedSize(180, 45)
+            hbox.addWidget(btn)
 
-        # 右半身关节
-        right_joints = [
-            ("右肩前摆", 0, 2),
-            ("右肘", 1, 2),
-            ("右髋前摆", 2, 2),
-            ("右髋侧摆", 3, 2),
-            ("右膝", 4, 2)
-        ]
-
-        # 添加关节标签
-        for name, row, col in left_joints + right_joints:
-            label = QLabel(f"{name}:")
-            grid.addWidget(label, row, col)
-
-        # 添加角度输入框
-        self.joint_inputs = {}
-        for name, row, col in left_joints + right_joints:
-            spinbox = QSpinBox()
-            spinbox.setRange(-180, 180)
-            spinbox.setSuffix("°")
-            spinbox.setFixedWidth(100)
-            self.joint_inputs[name] = spinbox
-            grid.addWidget(spinbox, row, col + 1)
-
-        group.setLayout(grid)
-        self.layout.addWidget(group)
+        self.layout.addLayout(hbox)
 
     def init_sequence_controls(self):
         """序列管理组件"""
-        hbox = QHBoxLayout()
+        group = QGroupBox("序列管理")
+        grid = QGridLayout()
+
         self.add_seq_btn = QPushButton("加入序列")
         self.clear_seq_btn = QPushButton("清除序列")
-        self.reset_btn = QPushButton("复位")
+        self.zero_seq_btn = QPushButton("零位加入序列")
 
-        for btn in [self.add_seq_btn, self.clear_seq_btn, self.reset_btn]:
-            btn.setFixedSize(120, 40)
-            hbox.addWidget(btn)
+        buttons = [
+            (self.add_seq_btn, 0, 0),
+            (self.clear_seq_btn, 0, 1),
+            (self.zero_seq_btn, 0, 2)
+        ]
 
-        self.layout.addLayout(hbox)
+        for btn, row, col in buttons:
+            btn.setFixedSize(140, 40)
+            grid.addWidget(btn, row, col)
+
+        group.setLayout(grid)
+        self.layout.addWidget(group)
 
     def init_action_controls(self):
         """动作生成组件"""

@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from core import init_resources
-from core.main_window import MainWindow
+from app.core import init_resources
+from app.core import MainWindow
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
