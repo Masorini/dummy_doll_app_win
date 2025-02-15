@@ -16,18 +16,30 @@ class StyleSheet:
         }
     """
 
+    # 更新导航按钮样式
     NAV_BUTTON = """
-        QPushButton {
-            background: #F0F0F0;
-            border: 1px solid #CCCCCC;
-            padding: 8px;
-            border-radius: 4px;
-        }
-        QPushButton:checked {
-            background: #E0E0FF;
-            border-color: #8888FF;
-        }
-    """
+           QPushButton {
+               background: #F0F0F0;
+               border: 1px solid #CCCCCC;
+               padding: 8px;
+               border-radius: 4px;
+               font-size: 14px;
+           }
+           QPushButton:checked {
+               background: #E0E0FF;
+               border-color: #8888FF;
+           }
+           QPushButton:hover {
+               background: #E0E0E0;
+           }
+       """
+
+    QToolButton = """
+            QToolButton{
+                icon - size: 232px;
+                border: none;
+            }
+        """
 
     class StyleSheet:
         # 新增部位选择样式
