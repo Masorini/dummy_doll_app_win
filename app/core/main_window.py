@@ -7,8 +7,9 @@ from .pages.teaching import TeachingPage
 from .pages.manual import ManualPage
 from .pages.posture import PosturePage
 from .pages.library import LibraryPage
-from .connector.teachingPageConnector import TeachingPageConnector
-from .controller.teachingController import TeachingController
+from .connector.teaching_page_connector import TeachingPageConnector
+from .controller.teaching_controller import TeachingController
+
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -88,7 +89,7 @@ class MainWindow(QWidget):
 
         for name, page in self.pages.items():
             self.stacked_layout.addWidget(page)
-        
+
     def init_contorller(self):
         self.contorllers = {
             '离线控制': None,
@@ -98,7 +99,7 @@ class MainWindow(QWidget):
             '座姿配置': None,
             '库管理': None
         }
-    
+
     def init_connector(self):
         self.conectors = {
             '离线控制': None,
@@ -108,7 +109,7 @@ class MainWindow(QWidget):
             '座姿配置': None,
             '库管理': None
         }
-    
+
     def switch_page(self, page_name):
         """切换页面"""
         for btn in self.nav_buttons.values():
