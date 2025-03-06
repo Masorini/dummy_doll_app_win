@@ -7,6 +7,8 @@ from .pages.teaching import TeachingPage
 from .pages.manual import ManualPage
 from .pages.posture import PosturePage
 from .pages.library import LibraryPage
+from .connector.teaching_page_connector import TeachingPageConnector
+from .controller.teaching_controller import TeachingController
 
 
 class MainWindow(QWidget):
@@ -26,6 +28,10 @@ class MainWindow(QWidget):
         self.init_navigation(main_layout)
         # 初始化页面堆栈
         self.init_pages(main_layout)
+        # 初始化业务逻辑模块
+        self.init_contorller()
+        # 初始化连接器
+        self.init_connector()
 
     def init_title_bar(self, main_layout):
         """初始化顶部标题栏"""
@@ -83,6 +89,26 @@ class MainWindow(QWidget):
 
         for name, page in self.pages.items():
             self.stacked_layout.addWidget(page)
+
+    def init_contorller(self):
+        self.contorllers = {
+            '离线控制': None,
+            '实时调试': None,
+            '示教规划': TeachingController(),
+            '手动规划': None,
+            '座姿配置': None,
+            '库管理': None
+        }
+
+    def init_connector(self):
+        self.conectors = {
+            '离线控制': None,
+            '实时调试': None,
+            '示教规划': TeachingPageConnector(self.pages['示教规划'], self.contorllers['示教规划']),
+            '手动规划': None,
+            '座姿配置': None,
+            '库管理': None
+        }
 
     def switch_page(self, page_name):
         """切换页面"""
