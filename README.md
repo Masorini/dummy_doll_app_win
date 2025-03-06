@@ -13,6 +13,13 @@ dummyDoll/
 │   │   ├── __init__.py
 │   │   ├── config.py           # UI configuration (fonts/colors/etc)
 │   │   ├── main_window.py      # Main window management
+│   │   ├── connector/                          # Connectors
+│   │   │   ├── __init__.py
+│   │   │   ├── page_connector.py               # Base page connector
+│   │   │   └── teaching_page_connector.py      # Teaching page connector
+│   │   ├── controller/                         # Controllers
+│   │   │   ├── __init__.py
+│   │   │   └── teaching_contorller.py          # Teaching page connector
 │   │   ├── pages/              # Control pages
 │   │   │   ├── __init__.py
 │   │   │   ├── base_page.py    # Base page class
@@ -41,7 +48,10 @@ dummyDoll/
 ├── backend/                    # Backend Services
 │   ├── services/               # Core services
 │   │   ├── control_service.py  # Motion control service
-│   │   └── device_manager.py   # Device connection management
+│   │   ├── device_manager.py   # Device connection management
+│   │   ├── cpd_manager.py      # Cpd device management
+│   │   ├── servo_manager.py    # Servo management
+│   │   └── dxl_com_interface.py # DXL communication interface(Serial)
 │   ├── protocols/              # Communication protocols
 │   │   ├── doll_v1_protocol.py # Protocol V1
 │   │   └── doll_v2_protocol.py # Protocol V2 (extensible)
