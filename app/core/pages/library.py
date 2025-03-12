@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QHBoxLayout, QVBoxLayout, QPushButton,
-                             QLabel, QListWidget, QFileDialog, QGroupBox, QLineEdit)
+                             QLabel, QListWidget, QFileDialog, QGroupBox, QLineEdit, QComboBox)
 from .base_page import BasePage
 from app.core.config import StyleSheet
 
@@ -39,15 +39,13 @@ class LibraryPage(BasePage):
 
         # 动作ID输入
         hbox_id = QHBoxLayout()
-        self.upload_id_btn = QPushButton("上传动作ID")
-        self.action_id_input = QLineEdit()
-        self.action_id_input.setPlaceholderText("输入动作ID")
+        self.action_id_label = QLabel("选择动作 ID:")
+        self.action_id_select = QComboBox()
+        self.action_id_select.addItems(["A001", "A002", "A003", "A004", "A005"])
+        self.action_id_select.setFixedHeight(40)
 
-        self.upload_id_btn.setFixedSize(120, 40)
-        self.action_id_input.setFixedHeight(40)
-
-        hbox_id.addWidget(self.upload_id_btn)
-        hbox_id.addWidget(self.action_id_input)
+        hbox_id.addWidget(self.action_id_label)
+        hbox_id.addWidget(self.action_id_select)
 
         # 文件选择
         hbox_file = QHBoxLayout()
@@ -101,3 +99,8 @@ class LibraryPage(BasePage):
         """保存到Flash"""
         self.status_label.setText("正在保存到Flash...")
         # Flash保存逻辑...
+
+    def action_id_changed(self):
+        """动作 ID 变化时的处理"""
+        selected_id = self.action_id_select.currentText()
+        print(f"动作 ID 变更: {selected_id}")

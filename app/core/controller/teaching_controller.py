@@ -4,26 +4,50 @@ from backend.services.servo_manager import ServoManager
 
 class TeachingController(QObject):
     def __init__(self):
-        self.servo = ServoManager(1) # TODO: just for test, change in the future
-        pass
+        super().__init__()
+        self.servo = ServoManager(1)  # TODO: 未来修改 ID
 
-    # TODO: just for test, change in the future
     @pyqtSlot()
     def power_on(self):
-        self.servo.enable_servo()
-        pass
+        """上电"""
+        print("power on...")
+        # self.servo.enable_servo()
 
+    @pyqtSlot()
     def power_off(self):
-        pass
+        """断电"""
+        print("power off...")
 
-    def enable(self):
-        pass
+    @pyqtSlot()
+    def enable_servo(self):
+        """使能"""
+        print("enable servo...")
 
-    def disable(self):
-        pass
+    @pyqtSlot()
+    def disable_servo(self):
+        """去使能"""
+        print("disable servo...")
 
-    def read_present_position(self):
-        pass
+    @pyqtSlot()
+    def read_pos(self):
+        print("read pos...")
 
-    def stop_read_position(self):
-        pass
+    @pyqtSlot()
+    def stop_read_pos(self):
+        print("stop read pos...")
+
+    @pyqtSlot()
+    def add_seq(self):
+        print("add seq...")
+
+    @pyqtSlot()
+    def clear_seq(self):
+        print("clear seq...")
+
+    @pyqtSlot()
+    def zero_seq(self):
+        print("zero seq...")
+
+    @pyqtSlot()
+    def generate(self):
+        print("generate...")
