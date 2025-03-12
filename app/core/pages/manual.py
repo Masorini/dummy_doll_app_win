@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QGridLayout, QHBoxLayout, QPushButton, QLineEdit, QLabel, QGroupBox,
-                             QSpinBox, QCheckBox)
+                             QSpinBox, QCheckBox, QTableWidget, QVBoxLayout)
 from .base_page import BasePage
 from app.core.config import StyleSheet
 
@@ -11,26 +11,12 @@ class ManualPage(BasePage):
 
     def init_ui(self):
         """初始化手动规划页面"""
-        # 电源控制区
-        self.init_power_controls()
-
-        # 接头选择区
-        self.init_connector_controls()
-
-        # 关节角度控制区
-        # self.init_joint_controls()
-
-        # 序列管理区
-        self.init_sequence_controls()
-
-        # 动作生成区
-        self.init_action_controls()
-
-        # 部位选择区
-        self.init_part_selection()
-
-        # 状态显示
-        self.init_status()
+        self.init_power_controls() # 电源控制区
+        self.init_connector_controls() # 接头选择区
+        self.init_sequence_controls() # 序列管理区
+        self.init_action_controls() # 动作生成区
+        self.init_part_table()  # 部位信息展示表格
+        self.init_status() # 状态显示
 
     def init_power_controls(self):
         """电源控制组件"""
@@ -51,20 +37,22 @@ class ManualPage(BasePage):
 
         # 左半身关节
         left_joints = [
-            ("左肩前摆", 0, 0),
-            ("左肘", 1, 0),
-            ("左髋前摆", 2, 0),
-            ("左髋侧摆", 3, 0),
-            ("左膝", 4, 0)
+            ("摆头", 0, 0),
+            ("左肩前摆", 1, 0),
+            ("左肘", 2, 0),
+            ("左髋前摆", 3, 0),
+            ("左髋侧摆", 4, 0),
+            ("左膝", 5, 0)
         ]
 
         # 右半身关节
         right_joints = [
-            ("右肩前摆", 0, 2),
-            ("右肘", 1, 2),
-            ("右髋前摆", 2, 2),
-            ("右髋侧摆", 3, 2),
-            ("右膝", 4, 2)
+            ("抬头", 0, 2),
+            ("右肩前摆", 1, 2),
+            ("右肘", 2, 2),
+            ("右髋前摆", 3, 2),
+            ("右髋侧摆", 4, 2),
+            ("右膝", 5, 2)
         ]
 
         # 添加关节标签
@@ -112,23 +100,19 @@ class ManualPage(BasePage):
         hbox.addWidget(self.action_name_input)
         self.layout.addLayout(hbox)
 
-    def init_part_selection(self):
-        """部位选择组件"""
-        group = QGroupBox("部位选择")
-        hbox = QHBoxLayout()
+    def init_part_table(self):
+        """部位信息展示表格"""
+        group = QGroupBox("部位信息")
+        vbox = QVBoxLayout()
 
-        self.parts = {
-            "头部": QCheckBox("头部"),
-            "左臂": QCheckBox("左臂"),
-            "右臂": QCheckBox("右臂"),
-            "左腿": QCheckBox("左腿"),
-            "右腿": QCheckBox("右腿")
-        }
+        self.part_table = QTableWidget()
+        self.part_table.setColumnCount(5)
+        self.part_table.setHorizontalHeaderLabels(["头部", "左臂", "右臂", "左腿", "右腿"])
+        self.part_table.setRowCount(1)
+        self.part_table.setEditTriggers(QTableWidget.NoEditTriggers)  # 设置表格不可编辑
 
-        for part in self.parts.values():
-            hbox.addWidget(part)
-
-        group.setLayout(hbox)
+        vbox.addWidget(self.part_table)
+        group.setLayout(vbox)
         self.layout.addWidget(group)
 
     def init_status(self):
