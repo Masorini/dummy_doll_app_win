@@ -6,8 +6,19 @@ class TeachingPageConnector(PageConnector):
     def __init__(self, page: TeachingPage, controller: TeachingController):
         super().__init__(page, controller)
         self.init_connector()
-        pass
 
     def init_connector(self):
-        # 确保连接时忽略参数（如果方法不需要参数）
+        """连接 UI 组件和控制器"""
         self.page.power_on_btn.clicked.connect(lambda: self.controller.power_on())
+        self.page.power_off_btn.clicked.connect(lambda: self.controller.power_off())
+        self.page.enable_btn.clicked.connect(lambda: self.controller.enable_servo())
+        self.page.disable_btn.clicked.connect(lambda: self.controller.disable_servo())
+
+        self.page.read_pos_btn.clicked.connect(lambda: self.controller.read_pos())
+        self.page.stop_read_btn.clicked.connect(lambda: self.controller.stop_read_pos())
+
+        self.page.add_seq_btn.clicked.connect(lambda: self.controller.add_seq())
+        self.page.clear_seq_btn.clicked.connect(lambda: self.controller.clear_seq())
+        self.page.zero_seq_btn.clicked.connect(lambda: self.controller.zero_seq())
+
+        self.page.generate_btn.clicked.connect(lambda: self.controller.generate())
