@@ -1,6 +1,14 @@
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedLayout, QToolButton, QLabel
 from app.core.config import StyleSheet
+from .connector.library_connector import LibraryConnector
+from .connector.manual_connector import ManualConnector
+from .connector.posture_connector import PostureConnector
+from .connector.realtime_connector import RealtimeConnector
+from .controller.library_controller import LibraryController
+from .controller.manual_controller import ManualController
+from .controller.posture_controller import PostureController
+from .controller.realtime_controller import RealtimeController
 from .pages.offline import OfflinePage
 from .pages.realtime import RealtimePage
 from .pages.teaching import TeachingPage
@@ -43,7 +51,7 @@ class MainWindow(QWidget):
 
         # 感叹号按钮 todo: 尺寸修改未生效
         self.info_btn = QToolButton()
-        self.info_btn.setIcon(QIcon("app/resources/icons/warning2.png")) # 需要提供图标资源
+        self.info_btn.setIcon(QIcon("app/resources/icons/warning2.png"))  # 需要提供图标资源
         self.info_btn.setToolTip("系统状态提示")
         self.info_btn.setStyleSheet(StyleSheet.QToolButton)
 
@@ -93,21 +101,21 @@ class MainWindow(QWidget):
     def init_contorller(self):
         self.contorllers = {
             '离线控制': None,
-            '实时调试': None,
+            '实时调试': RealtimeController(),
             '示教规划': TeachingController(),
-            '手动规划': None,
-            '座姿配置': None,
-            '库管理': None
+            '手动规划': ManualController(self.pages['手动规划']),
+            '座姿配置': PostureController(),
+            '库管理': LibraryController(),
         }
 
     def init_connector(self):
         self.conectors = {
             '离线控制': None,
-            '实时调试': None,
+            '实时调试': RealtimeConnector(self.pages['实时调试'], self.contorllers['实时调试']),
             '示教规划': TeachingPageConnector(self.pages['示教规划'], self.contorllers['示教规划']),
-            '手动规划': None,
-            '座姿配置': None,
-            '库管理': None
+            '手动规划': ManualConnector(self.pages['手动规划'], self.contorllers['手动规划']),
+            '座姿配置': PostureConnector(self.pages['座姿配置'], self.contorllers['座姿配置']),
+            '库管理': LibraryConnector(self.pages['库管理'], self.contorllers['库管理']),
         }
 
     def switch_page(self, page_name):
