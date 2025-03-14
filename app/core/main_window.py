@@ -3,10 +3,12 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSta
 from app.core.config import StyleSheet
 from .connector.library_connector import LibraryConnector
 from .connector.manual_connector import ManualConnector
+from .connector.offline_connector import OfflineConnector
 from .connector.posture_connector import PostureConnector
 from .connector.realtime_connector import RealtimeConnector
 from .controller.library_controller import LibraryController
 from .controller.manual_controller import ManualController
+from .controller.offline_controller import OfflineController
 from .controller.posture_controller import PostureController
 from .controller.realtime_controller import RealtimeController
 from .pages.offline import OfflinePage
@@ -100,7 +102,7 @@ class MainWindow(QWidget):
 
     def init_contorller(self):
         self.contorllers = {
-            '离线控制': None,
+            '离线控制': OfflineController(),
             '实时调试': RealtimeController(),
             '示教规划': TeachingController(),
             '手动规划': ManualController(self.pages['手动规划']),
@@ -110,7 +112,7 @@ class MainWindow(QWidget):
 
     def init_connector(self):
         self.conectors = {
-            '离线控制': None,
+            '离线控制': OfflineConnector(self.pages['离线控制'], self.contorllers['离线控制']),
             '实时调试': RealtimeConnector(self.pages['实时调试'], self.contorllers['实时调试']),
             '示教规划': TeachingPageConnector(self.pages['示教规划'], self.contorllers['示教规划']),
             '手动规划': ManualConnector(self.pages['手动规划'], self.contorllers['手动规划']),
