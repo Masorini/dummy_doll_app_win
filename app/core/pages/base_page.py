@@ -6,7 +6,7 @@ class BasePage(QWidget):
         super().__init__()
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(30, 20, 30, 30)
-        self.layout.setSpacing(20)
+        self.layout.setSpacing(10)
 
     def add_section_title(self, text):
         """添加区域标题"""

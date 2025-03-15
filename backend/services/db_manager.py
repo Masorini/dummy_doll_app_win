@@ -15,11 +15,22 @@ class DatabaseManager:
         self.conn.row_factory = sqlite3.Row
 
     def create_tables(self):
-        """创建保存动作数据的表"""
-        create_table_sql = """
+        """创建动作相关的表"""
+        # 总体动作表
+        create_actions_table_sql = """
         CREATE TABLE IF NOT EXISTS Actions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             action_name TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+        # 动作序列位置表
+        create_positions_table_sql = """
+        CREATE TABLE IF NOT EXISTS ActionPositions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            action_id INTEGER,
+            sequence_order INTEGER,
             head_swivel INTEGER,            -- 摆头
             head_tilt INTEGER,              -- 抬头
             left_shoulder_forward INTEGER,  -- 左肩前摆
@@ -34,33 +45,67 @@ class DatabaseManager:
             right_hip_forward INTEGER,      -- 右髋前摆
             right_hip_side INTEGER,         -- 右髋侧摆
             right_knee INTEGER,             -- 右膝
-            is_zero INTEGER DEFAULT 0,      -- 是否零位（0: 否, 1: 是）
-            is_valid INTEGER DEFAULT 1,     -- 状态标志（1: 有效, 0: 被删除或无效）
+            is_zero INTEGER DEFAULT 0,
+            is_valid INTEGER DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(action_id) REFERENCES Actions(id)
         );
         """
         cursor = self.conn.cursor()
-        cursor.execute(create_table_sql)
+        cursor.execute(create_actions_table_sql)
+        cursor.execute(create_positions_table_sql)
         self.conn.commit()
 
-    def insert_action(self, data: dict) -> int:
+    def insert_action(self, action_name: str) -> int:
         """
-        插入一条动作记录。
-        data：字典形式，包含列名和对应的值（不包含 id、created_at、updated_at）
-        返回值：新插入记录的 id
+        插入一条总体动作记录，返回新记录的 id
         """
-        columns = ', '.join(data.keys())
-        placeholders = ', '.join(['?'] * len(data))
-        sql = f"INSERT INTO Actions ({columns}) VALUES ({placeholders})"
+        sql = "INSERT INTO Actions (action_name) VALUES (?)"
         cursor = self.conn.cursor()
-        cursor.execute(sql, list(data.values()))
+        cursor.execute(sql, (action_name,))
         self.conn.commit()
         return cursor.lastrowid
 
+    def insert_action_positions(self, action_id: int, positions: list):
+        """
+        批量插入动作序列位置数据
+        positions: list of dict，每个 dict 包含14个角度及 is_zero 标志
+        """
+        sql = """INSERT INTO ActionPositions 
+                 (action_id, sequence_order, head_swivel, head_tilt, 
+                  left_shoulder_forward, left_shoulder_side, left_elbow, 
+                  right_shoulder_forward, right_shoulder_side, right_elbow, 
+                  left_hip_forward, left_hip_side, left_knee, 
+                  right_hip_forward, right_hip_side, right_knee, is_zero, is_valid)
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+        cursor = self.conn.cursor()
+        for order, pos in enumerate(positions):
+            cursor.execute(sql, (
+                action_id,
+                order,
+                pos.get("摆头", 0),
+                pos.get("抬头", 0),
+                pos.get("左肩前摆", 0),
+                pos.get("左肩侧摆", 0),
+                pos.get("左肘", 0),
+                pos.get("右肩前摆", 0),
+                pos.get("右肩侧摆", 0),
+                pos.get("右肘", 0),
+                pos.get("左髋前摆", 0),
+                pos.get("左髋侧摆", 0),
+                pos.get("左膝", 0),
+                pos.get("右髋前摆", 0),
+                pos.get("右髋侧摆", 0),
+                pos.get("右膝", 0),
+                1 if pos.get("is_zero", False) else 0,
+                1
+            ))
+        self.conn.commit()
+
     def update_action(self, action_id: int, data: dict):
         """
-        更新指定 id 的动作记录。
+        更新指定 id 的动作记录
         """
         set_clause = ', '.join([f"{key} = ?" for key in data.keys()])
         sql = f"UPDATE Actions SET {set_clause}, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
@@ -70,7 +115,7 @@ class DatabaseManager:
 
     def delete_action(self, action_id: int):
         """
-        逻辑删除动作记录，将 is_valid 设为 0。
+        逻辑删除动作记录，将 is_valid 设为 0
         """
         sql = "UPDATE Actions SET is_valid = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
         cursor = self.conn.cursor()
@@ -79,7 +124,7 @@ class DatabaseManager:
 
     def fetch_action(self, action_id: int) -> Row:
         """
-        获取指定 id 的动作记录。
+        获取指定 id 的动作记录
         """
         sql = "SELECT * FROM Actions WHERE id = ?"
         cursor = self.conn.cursor()
@@ -88,7 +133,7 @@ class DatabaseManager:
 
     def fetch_all_actions(self) -> list:
         """
-        获取所有有效（未删除）的动作记录。
+        获取所有有效（未删除）的动作记录
         """
         sql = "SELECT * FROM Actions WHERE is_valid = 1"
         cursor = self.conn.cursor()
